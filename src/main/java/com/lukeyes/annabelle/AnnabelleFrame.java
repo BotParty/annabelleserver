@@ -2,34 +2,29 @@ package com.lukeyes.annabelle;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.lukeyes.annabelle.domain.Script;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.util.Set;
 
 public class AnnabelleFrame extends JFrame implements  ActionListener {
 
-    JList<String> scriptList = null;
-    JList<String> lineList = null;
-    JMenuItem menuItemSave;
-    JMenuBar menuBar;
-    JButton sendButton;
-    JTextField puppetTextField;
+    private JMenuItem menuItemSave;
+    private JMenuItem menuItemOpen;
 
-    public static AnnabelleFrame createAndShowGUI() {
+    static AnnabelleFrame createAndShowGUI() {
         AnnabelleFrame frame = new AnnabelleFrame();
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
-     //   frame.pack();
         frame.setState(Frame.NORMAL);
         frame.setVisible(true);
         return frame;
     }
 
-    public AnnabelleFrame() {
+    private AnnabelleFrame() {
         JPanel mainPanel = new JPanel();
         mainPanel.setLayout(new GridLayout(1,3));
 
@@ -48,13 +43,13 @@ public class AnnabelleFrame extends JFrame implements  ActionListener {
         createMenu();
 
         GraphicsDevice defaultDevice = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
-       // Rectangle screenBounds = defaultDevice.getDefaultConfiguration().getBounds();
-        this.setSize(1024, 768);
-      //  this.setSize(screenBounds.width, screenBounds.height);
-   //     mainPanel.setSize(screenBounds.width, screenBounds.height);
+        Rectangle screenBounds = defaultDevice.getDefaultConfiguration().getBounds();
+        this.setSize(
+                Math.round(screenBounds.width * .75f),
+                Math.round(screenBounds.height * .75f));
    }
 
-    public JPanel listPanel() {
+    private JPanel listPanel() {
         JPanel scriptPanel = new JPanel(new BorderLayout());
 
         JList<String> list = new JList<>();
@@ -67,12 +62,10 @@ public class AnnabelleFrame extends JFrame implements  ActionListener {
 
         scriptPanel.add(list, BorderLayout.CENTER);
 
-        scriptList = list;
-
         return scriptPanel;
     }
 
-    public JPanel scriptContentPanel() {
+    private JPanel scriptContentPanel() {
         JPanel scriptContentPanel = new JPanel(new BorderLayout());
 
         JList<String> list = new JList<>();
@@ -83,12 +76,10 @@ public class AnnabelleFrame extends JFrame implements  ActionListener {
 
         scriptContentPanel.add(list, BorderLayout.CENTER);
 
-        lineList = list;
-
         return scriptContentPanel;
     }
 
-    public JPanel miscPanel() {
+    private JPanel miscPanel() {
         JPanel miscPanel = new JPanel();
      //   miscPanel.setLayout(new BoxLayout(miscPanel,BoxLayout.PAGE_AXIS));
         miscPanel.setLayout(new GridLayout(3,1));
@@ -105,13 +96,13 @@ public class AnnabelleFrame extends JFrame implements  ActionListener {
         return miscPanel;
     }
 
-    public JPanel puppetPanel() {
+    private JPanel puppetPanel() {
         JPanel puppetPanel = new JPanel();
         puppetPanel.setLayout(new GridBagLayout());
 
-        puppetTextField = new JTextField(50);
+        JTextField puppetTextField = new JTextField(50);
         puppetTextField.getDocument().addDocumentListener(Controller.getInstance().puppetController);
-        sendButton = new JButton("Send");
+        JButton sendButton = new JButton("Send");
         sendButton.addActionListener(Controller.getInstance().puppetController);
 
         GridBagConstraints textFieldContrainsts = new GridBagConstraints();
@@ -132,7 +123,7 @@ public class AnnabelleFrame extends JFrame implements  ActionListener {
         return puppetPanel;
     }
 
-    public JPanel favoritesPanel() {
+    private JPanel favoritesPanel() {
         JPanel favoritesPanel = new JPanel();
         favoritesPanel.setLayout(new GridLayout(3,3));
 
@@ -147,7 +138,7 @@ public class AnnabelleFrame extends JFrame implements  ActionListener {
         return favoritesPanel;
     }
 
-    public JPanel historyPanel() {
+    private JPanel historyPanel() {
         JPanel historyPanel = new JPanel(new BorderLayout());
 
         JList<String> list = new JList<>();
@@ -163,14 +154,18 @@ public class AnnabelleFrame extends JFrame implements  ActionListener {
         return historyPanel;
     }
 
-    public void createMenu() {
+    private void createMenu() {
         menuItemSave = new JMenuItem("Save");
         menuItemSave.addActionListener(this);
 
+        menuItemOpen = new JMenuItem("Open");
+        menuItemOpen.addActionListener(this);
+
         JMenu menu = new JMenu("File");
         menu.add(menuItemSave);
+        menu.add(menuItemOpen);
 
-        menuBar = new JMenuBar();
+        JMenuBar menuBar = new JMenuBar();
         menuBar.add(menu);
         this.setJMenuBar(menuBar);
     }
@@ -179,23 +174,31 @@ public class AnnabelleFrame extends JFrame implements  ActionListener {
     public void actionPerformed(ActionEvent e) {
         if(e.getSource() == menuItemSave) {
 
-            // save current script
-            System.out.println("Save current script");
-
-            String title = scriptList.getSelectedValue();
-
-            Script currentScript = Data.getInstance().scripts.get(title);
-
             ObjectMapper mapper = new ObjectMapper();
             String scriptAsJSONString = null;
             try {
-                scriptAsJSONString = mapper.writeValueAsString(currentScript);
+                scriptAsJSONString = mapper.writeValueAsString(Data.getInstance().favorites);
             } catch (JsonProcessingException e1) {
                 e1.printStackTrace();
             }
             System.out.println(scriptAsJSONString);
+        } else if(e.getSource() == menuItemOpen) {
+            openFile();
         }
     }
 
+    private void openFile() {
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setDialogTitle("Specify a file to open");
 
+        int userSelection = fileChooser.showOpenDialog(this);
+
+        if (userSelection == JFileChooser.APPROVE_OPTION) {
+
+            File fileToOpen = fileChooser.getSelectedFile();
+            System.out.println("Open file: " + fileToOpen.getAbsolutePath());
+
+            Data.getInstance().loadScriptList(fileToOpen);
+        }
+    }
 }

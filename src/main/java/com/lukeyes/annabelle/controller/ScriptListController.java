@@ -16,13 +16,15 @@ public class ScriptListController implements ListSelectionListener {
 
             int firstIndex = listSelectionModel.getMinSelectionIndex();
             System.out.println("Index: " + firstIndex);
+            if(firstIndex >= 0) {
 
-            String currentTitle = Data.getInstance().getScriptModel().getElementAt(firstIndex);
-            System.out.println("Current Title - " + currentTitle);
+                String currentTitle = Data.getInstance().getScriptModel().getElementAt(firstIndex);
+                System.out.println("Current Title - " + currentTitle);
 
-            Data.getInstance().getScriptContentModel().clear();
-            Script currentScript = Data.getInstance().getScripts().get(currentTitle);
-            currentScript.lines.forEach(Data.getInstance().getScriptContentModel()::addElement);
+                Data.getInstance().getScriptContentModel().clear();
+                Script currentScript = Data.getInstance().getScripts().get(currentTitle);
+                currentScript.lines.forEach(Data.getInstance().getScriptContentModel()::addElement);
+            }
         }
     }
 }

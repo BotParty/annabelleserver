@@ -2,14 +2,12 @@ package com.lukeyes.annabelle;
 
 import com.lukeyes.annabelle.domain.Favorites;
 import com.lukeyes.annabelle.domain.Script;
-import com.lukeyes.annabelle.test.StoneSoup;
+import com.lukeyes.annabelle.domain.ScriptList;
 import com.lukeyes.annabelle.test.TestFavorites;
-import com.lukeyes.annabelle.test.Twinkle;
 
 import javax.swing.*;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import java.io.File;
+import java.util.*;
 
 public class Data {
 
@@ -23,6 +21,7 @@ public class Data {
         return instance;
     }
 
+    ScriptList masterList;
     Map<String, Script> scripts;
     Favorites favorites;
     String puppetText;
@@ -57,24 +56,36 @@ public class Data {
     }
 
     private Data() {
+
+        scriptModel = new DefaultListModel<>();
+        scriptContentModel = new DefaultListModel<>();
+        favorites = Favorites.create("Favorites.json");
+        historyModel = new DefaultListModel<>();
+    }
+
+    private void loadScriptFromMasterList(String parentPath) {
+        List<String> titleList2 = masterList.getScripts();
+
         scripts = new HashMap<>();
-
-        Script twinkle = Twinkle.create();
-        scripts.put(twinkle.title, twinkle);
-
-        Script stoneSoup = StoneSoup.create();
-        scripts.put(stoneSoup.title, stoneSoup);
+        for(String title : titleList2) {
+            String absolutePath = String.format("%s\\%s", parentPath, title);
+            final Script script = Script.create(absolutePath);
+            scripts.put(script.title, script);
+        }
 
         Set<String> titles = scripts.keySet();
-        scriptModel = new DefaultListModel<>();
+        scriptModel.clear();
         titles.forEach(scriptModel::addElement);
 
-        favorites = TestFavorites.create();
-        historyModel = new DefaultListModel<>();
-
-        scriptContentModel = new DefaultListModel<>();
-
-        Script currentScript = scripts.get("Twinkle Twinkle Little Star");
+        Script currentScript = scripts.get(titles.toArray()[0]);
+        scriptContentModel.clear();
         currentScript.lines.forEach(scriptContentModel::addElement);
+    }
+
+    public void loadScriptList(File fileToOpen) {
+        masterList = ScriptList.open(fileToOpen);
+        String parentPath = fileToOpen.getParentFile().getAbsolutePath();
+        System.out.println("Parent path: " + parentPath);
+        loadScriptFromMasterList(parentPath);
     }
 }
