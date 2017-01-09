@@ -68,7 +68,8 @@ public class Data {
 
         scripts = new HashMap<>();
         for(String title : titleList2) {
-            String absolutePath = String.format("%s\\%s", parentPath, title);
+            java.nio.file.Path path = java.nio.file.Paths.get(parentPath, title);
+            String absolutePath = path.toString();
             final Script script = Script.create(absolutePath);
             scripts.put(script.title, script);
         }
