@@ -26,6 +26,7 @@ public class Controller {
         favoritesController = new FavoritesController();
         puppetController = new SendController();
         scriptListController = new ScriptListController();
+        scriptContentController = new ScriptContentController();
     }
 
     public void send(String text) {

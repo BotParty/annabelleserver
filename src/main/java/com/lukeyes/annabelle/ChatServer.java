@@ -71,6 +71,7 @@ public class ChatServer extends WebSocketServer {
      *             When socket related I/O errors occur.
      */
     public void sendToAll( String text ) {
+        System.out.println("Sending text - " + text);
         Collection<WebSocket> con = connections();
         synchronized ( con ) {
             for( WebSocket c : con ) {

@@ -68,11 +68,15 @@ public class AnnabelleFrame extends JFrame implements  ActionListener {
     private JPanel scriptContentPanel() {
         JPanel scriptContentPanel = new JPanel(new BorderLayout());
 
+        JButton button = new JButton("Send");
+        button.addActionListener(Controller.getInstance().scriptContentController);
+        scriptContentPanel.add(button, BorderLayout.NORTH);
+
         JList<String> list = new JList<>();
         list.setModel(Data.getInstance().scriptContentModel);
         list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         list.setLayoutOrientation(JList.VERTICAL);
-        list.addListSelectionListener(Controller.getInstance().scriptContentController);
+        list.getSelectionModel().addListSelectionListener(Controller.getInstance().scriptContentController);
 
         scriptContentPanel.add(list, BorderLayout.CENTER);
 

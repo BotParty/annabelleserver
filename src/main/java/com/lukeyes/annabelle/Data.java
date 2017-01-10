@@ -25,7 +25,7 @@ public class Data {
     Map<String, Script> scripts;
     Favorites favorites;
     String puppetText;
-
+    String scriptContentText;
 
     DefaultListModel<String> historyModel;
     DefaultListModel<String> scriptModel;
@@ -53,6 +53,14 @@ public class Data {
 
     public void setPuppetText(String puppetText) {
         this.puppetText = puppetText;
+    }
+
+    public String getScriptContentText() {
+        return scriptContentText;
+    }
+
+    public void setScriptContentText(String scriptContentText) {
+        this.scriptContentText = scriptContentText;
     }
 
     private Data() {
