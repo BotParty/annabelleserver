@@ -69,6 +69,8 @@ public class Data {
         scriptContentModel = new DefaultListModel<>();
         favorites = Favorites.create("Favorites.json");
         historyModel = new DefaultListModel<>();
+
+        loadScriptList("Scripts.json");
     }
 
     private void loadScriptFromMasterList(String parentPath) {
@@ -89,6 +91,11 @@ public class Data {
         Script currentScript = scripts.get(titles.toArray()[0]);
         scriptContentModel.clear();
         currentScript.lines.forEach(scriptContentModel::addElement);
+    }
+
+    public void loadScriptList(String fileName) {
+        masterList = ScriptList.create(fileName);
+        loadScriptFromMasterList("");
     }
 
     public void loadScriptList(File fileToOpen) {

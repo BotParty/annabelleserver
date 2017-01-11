@@ -27,17 +27,31 @@ public class ScriptList {
 
     public static ScriptList create(String fileName) {
 
-        ClassLoader classLoader = ScriptList.class.getClassLoader();
-        File scriptFile = new File(classLoader.getResource(fileName).getFile());
-
-        ObjectMapper mapper = new ObjectMapper();
-        ScriptList script = null;
+        ScriptList scriptList = null;
         try {
-            script = mapper.readValue(scriptFile, ScriptList.class);
-        } catch (IOException e) {
-            e.printStackTrace();
+            BufferedReader reader = new BufferedReader(new FileReader(fileName));
+
+            // load in json
+
+            ObjectMapper mapper = new ObjectMapper();
+            StringBuilder builder = new StringBuilder();
+            String aux = "";
+
+            while ((aux = reader.readLine()) != null) {
+                builder.append(aux);
+            }
+
+            String text = builder.toString();
+            reader.close();
+
+            scriptList = mapper.readValue(text, ScriptList.class);
+
+        } catch (IOException e2) {
+            // TODO Auto-generated catch block
+            e2.printStackTrace();
         }
-        return script;
+
+        return scriptList;
     }
 
     public static ScriptList open(File fileToOpen) {
