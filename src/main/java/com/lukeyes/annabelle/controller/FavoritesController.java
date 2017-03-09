@@ -16,6 +16,6 @@ public class FavoritesController implements ActionListener {
             String buttonText = button.getText();
             String sayText = Data.getInstance().getFavorites().getFavorites().get(buttonText);
             Controller.getInstance().send(sayText);
-        }
+    }
     }
 }
