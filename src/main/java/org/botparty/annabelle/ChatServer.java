@@ -1,4 +1,4 @@
-package com.lukeyes.annabelle;
+package org.botparty.annabelle;
 
 import org.java_websocket.WebSocket;
 import org.java_websocket.handshake.ClientHandshake;
@@ -18,7 +18,7 @@ public class ChatServer extends WebSocketServer {
     public static ChatServer getInstance() {
         if(instance == null) {
             try {
-                instance = new ChatServer(8080);
+                instance = new ChatServer(12345);
                 instance.start();
             } catch (UnknownHostException e) {
                 e.printStackTrace();

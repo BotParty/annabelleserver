@@ -1,4 +1,4 @@
-package com.lukeyes.annabelle;
+package org.botparty.annabelle;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;

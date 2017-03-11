@@ -1,9 +1,8 @@
-package com.lukeyes.annabelle;
+package org.botparty.annabelle;
 
-import com.lukeyes.annabelle.domain.Favorites;
-import com.lukeyes.annabelle.domain.Script;
-import com.lukeyes.annabelle.domain.ScriptList;
-import com.lukeyes.annabelle.test.TestFavorites;
+import org.botparty.annabelle.domain.Favorites;
+import org.botparty.annabelle.domain.Script;
+import org.botparty.annabelle.domain.ScriptList;
 
 import javax.swing.*;
 import java.io.File;

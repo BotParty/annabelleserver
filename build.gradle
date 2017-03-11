@@ -1,4 +1,4 @@
-group 'com.lukeyes'
+group 'org.botparty'
 version '0.2'
 
 apply plugin: 'java'
@@ -9,7 +9,7 @@ task fatJar(type: Jar) {
     manifest {
         attributes 'Implementation-Title' : 'Annabelle Server',
                 'Implementation-Version' : version,
-                'Main-Class' : 'com.lukeyes.annabelle.Application'
+                'Main-Class' : 'org.botparty.annabelle.Application'
     }
     baseName = project.name + '-all'
     from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it)}}

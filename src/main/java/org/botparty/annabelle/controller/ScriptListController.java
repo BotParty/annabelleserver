@@ -1,7 +1,7 @@
-package com.lukeyes.annabelle.controller;
+package org.botparty.annabelle.controller;
 
-import com.lukeyes.annabelle.Data;
-import com.lukeyes.annabelle.domain.Script;
+import org.botparty.annabelle.Data;
+import org.botparty.annabelle.domain.Script;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;

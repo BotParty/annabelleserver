@@ -1,8 +1,8 @@
-package com.lukeyes.annabelle.test;
+package org.botparty.annabelle.test;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.lukeyes.annabelle.domain.Script;
+import org.botparty.annabelle.domain.Script;
 
 import java.io.File;
 import java.io.IOException;
