@@ -1,9 +1,9 @@
-package com.lukeyes.annabelle;
+package org.botparty.annabelle;
 
-import com.lukeyes.annabelle.controller.FavoritesController;
-import com.lukeyes.annabelle.controller.ScriptContentController;
-import com.lukeyes.annabelle.controller.ScriptListController;
-import com.lukeyes.annabelle.controller.SendController;
+import org.botparty.annabelle.controller.FavoritesController;
+import org.botparty.annabelle.controller.ScriptContentController;
+import org.botparty.annabelle.controller.ScriptListController;
+import org.botparty.annabelle.controller.SendController;
 
 public class Controller {
 

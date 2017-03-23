@@ -1,7 +1,6 @@
-package com.lukeyes.annabelle.domain;
+package org.botparty.annabelle.domain;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.lukeyes.annabelle.test.Twinkle;
 
 import java.io.BufferedReader;
 import java.io.File;

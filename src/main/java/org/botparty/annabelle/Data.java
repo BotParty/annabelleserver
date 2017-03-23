@@ -1,9 +1,8 @@
-package com.lukeyes.annabelle;
+package org.botparty.annabelle;
 
-import com.lukeyes.annabelle.domain.Favorites;
-import com.lukeyes.annabelle.domain.Script;
-import com.lukeyes.annabelle.domain.ScriptList;
-import com.lukeyes.annabelle.test.TestFavorites;
+import org.botparty.annabelle.domain.Favorites;
+import org.botparty.annabelle.domain.Script;
+import org.botparty.annabelle.domain.ScriptList;
 
 import javax.swing.*;
 import java.io.File;
@@ -26,6 +25,7 @@ public class Data {
     Favorites favorites;
     String puppetText;
     String scriptContentText;
+    List<String> emotionList;
 
     DefaultListModel<String> historyModel;
     DefaultListModel<String> scriptModel;
@@ -63,14 +63,18 @@ public class Data {
         this.scriptContentText = scriptContentText;
     }
 
+    public String[] getEmotionList() { return  new String[] {"happy","angry","bedroom","begging","buckteeth","dead","disgust","dizzy","eyeroll","heart","laughter","mischevious","money","neutral","peeved","sad","stars","stoned","surprised","thinking","worry"};}
+
     private Data() {
 
         scriptModel = new DefaultListModel<>();
         scriptContentModel = new DefaultListModel<>();
         favorites = Favorites.create("Favorites.json");
         historyModel = new DefaultListModel<>();
+        emotionList = new ArrayList<String>();
 
         loadScriptList("Scripts.json");
+       // loadEmotionList("Faces.json");
     }
 
     private void loadScriptFromMasterList(String parentPath) {
@@ -103,5 +107,15 @@ public class Data {
         String parentPath = fileToOpen.getParentFile().getAbsolutePath();
         System.out.println("Parent path: " + parentPath);
         loadScriptFromMasterList(parentPath);
+    }
+
+    public void loadEmotionList(String fileName) {
+       // masterList = ScriptList.create(fileName);
+       // emotionList = new String[] {"happy","angry","bedroom","begging","buckteeth","dead","disgust","dizzy","eyeroll","heart","laughter","mischevious","money","neutral","peeved","sad","stars","stoned","surprised","thinking","worry"};
+    }
+
+    public void loadEmotionList(File fileToOpen) {
+        masterList = ScriptList.open(fileToOpen);
+        emotionList = masterList.getScripts();
     }
 }

@@ -1,4 +1,4 @@
-package com.lukeyes.annabelle;
+package org.botparty.annabelle;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -28,15 +28,29 @@ public class AnnabelleFrame extends JFrame implements  ActionListener {
         JPanel mainPanel = new JPanel();
         mainPanel.setLayout(new GridLayout(1,3));
 
+
+        JPanel panel1 = new JPanel();
+        panel1.setLayout(new BoxLayout(panel1, BoxLayout.Y_AXIS));
         JPanel scriptPanel = listPanel();
 
-        mainPanel.add(scriptPanel);
+        panel1.add(scriptPanel);
+        panel1.add(eyePanel());
+
+        mainPanel.add(panel1);
+
+        JPanel panel2 = new JPanel();
+        panel2.setLayout(new BoxLayout(panel2, BoxLayout.Y_AXIS));
 
         JPanel scriptContentPanel = scriptContentPanel();
-        mainPanel.add(scriptContentPanel);
+        panel2.add(scriptContentPanel);
+        panel2.add(facePanel());
+        mainPanel.add(panel2);
 
         JPanel miscPanel = miscPanel();
         mainPanel.add(miscPanel);
+
+
+
 
         this.add(mainPanel);
 
@@ -106,6 +120,7 @@ public class AnnabelleFrame extends JFrame implements  ActionListener {
 
         JTextField puppetTextField = new JTextField(50);
         puppetTextField.getDocument().addDocumentListener(Controller.getInstance().puppetController);
+        puppetTextField.addActionListener(Controller.getInstance().puppetController);
         JButton sendButton = new JButton("Send");
         sendButton.addActionListener(Controller.getInstance().puppetController);
 
@@ -157,6 +172,63 @@ public class AnnabelleFrame extends JFrame implements  ActionListener {
 
         return historyPanel;
     }
+
+    private JPanel eyePanel() {
+        JPanel eyePanel = new JPanel();
+        eyePanel.setLayout(new BoxLayout(eyePanel, BoxLayout.Y_AXIS));
+
+
+        String[] eyeStates = {"blinking","open","closed","mid"};
+        ButtonGroup group = new ButtonGroup();
+        JLabel label = new JLabel("Eye Control");
+        eyePanel.add(label);
+
+        for (String state : eyeStates) {
+            JRadioButton butt = new JRadioButton(state);
+            butt.setActionCommand(state);
+            if (state.equals("blinking")) butt.setSelected(true);
+
+            butt.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    Controller.getInstance().send(
+                            String.format("\\eye %s", e.getActionCommand()));
+                }
+            });
+
+            group.add(butt);
+
+            eyePanel.add(butt);
+        }
+
+        return eyePanel;
+    }
+
+    private JPanel facePanel() {
+        JPanel facePanel = new JPanel();
+        facePanel.setLayout(new BoxLayout(facePanel, BoxLayout.Y_AXIS));
+        JComboBox faces = new JComboBox(Data.getInstance().getEmotionList());
+        faces.setSelectedIndex(0);
+        faces.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (e.getSource() instanceof JComboBox) {
+                    JComboBox cb =  (JComboBox)e.getSource();
+                    String face = (String)cb.getSelectedItem();
+
+                    Controller.getInstance().send(String.format("\\face %s",face));
+                }
+            }
+        });
+
+
+        JLabel label = new JLabel("Faces");
+        facePanel.add(label);
+        facePanel.add(faces);
+
+        return facePanel;
+    }
+
 
     private void createMenu() {
         menuItemSave = new JMenuItem("Save");

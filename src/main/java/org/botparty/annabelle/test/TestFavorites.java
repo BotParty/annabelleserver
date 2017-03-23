@@ -1,6 +1,6 @@
-package com.lukeyes.annabelle.test;
+package org.botparty.annabelle.test;
 
-import com.lukeyes.annabelle.domain.Favorites;
+import org.botparty.annabelle.domain.Favorites;
 
 import java.util.HashMap;
 import java.util.Map;

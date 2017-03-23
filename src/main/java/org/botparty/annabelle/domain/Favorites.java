@@ -1,4 +1,4 @@
-package com.lukeyes.annabelle.domain;
+package org.botparty.annabelle.domain;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 

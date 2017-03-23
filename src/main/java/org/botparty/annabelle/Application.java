@@ -1,4 +1,4 @@
-package com.lukeyes.annabelle;
+package org.botparty.annabelle;
 
 import javax.swing.*;
 
