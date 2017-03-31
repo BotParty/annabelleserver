@@ -2,11 +2,15 @@ package org.botparty.annabelle;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.botparty.annabelle.panels.HistoryPanel;
+import org.botparty.annabelle.panels.PuppetPanel;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.AdjustmentEvent;
+import java.awt.event.AdjustmentListener;
 import java.io.File;
 import java.util.Set;
 
@@ -28,7 +32,6 @@ public class AnnabelleFrame extends JFrame implements  ActionListener {
         JPanel mainPanel = new JPanel();
         mainPanel.setLayout(new GridLayout(1,3));
 
-
         JPanel panel1 = new JPanel();
         panel1.setLayout(new BoxLayout(panel1, BoxLayout.Y_AXIS));
         JPanel scriptPanel = listPanel();
@@ -48,10 +51,6 @@ public class AnnabelleFrame extends JFrame implements  ActionListener {
 
         JPanel miscPanel = miscPanel();
         mainPanel.add(miscPanel);
-
-
-
-
         this.add(mainPanel);
 
         createMenu();
@@ -74,7 +73,9 @@ public class AnnabelleFrame extends JFrame implements  ActionListener {
         list.setSelectedIndex(0);
         list.getSelectionModel().addListSelectionListener(Controller.getInstance().scriptListController);
 
-        scriptPanel.add(list, BorderLayout.CENTER);
+        JScrollPane scrollPane = new JScrollPane(list);
+
+        scriptPanel.add(scrollPane, BorderLayout.CENTER);
 
         return scriptPanel;
     }
@@ -92,7 +93,9 @@ public class AnnabelleFrame extends JFrame implements  ActionListener {
         list.setLayoutOrientation(JList.VERTICAL);
         list.getSelectionModel().addListSelectionListener(Controller.getInstance().scriptContentController);
 
-        scriptContentPanel.add(list, BorderLayout.CENTER);
+        JScrollPane scrollPane = new JScrollPane(list);
+
+        scriptContentPanel.add(scrollPane, BorderLayout.CENTER);
 
         return scriptContentPanel;
     }
@@ -115,31 +118,7 @@ public class AnnabelleFrame extends JFrame implements  ActionListener {
     }
 
     private JPanel puppetPanel() {
-        JPanel puppetPanel = new JPanel();
-        puppetPanel.setLayout(new GridBagLayout());
-
-        JTextField puppetTextField = new JTextField(50);
-        puppetTextField.getDocument().addDocumentListener(Controller.getInstance().puppetController);
-        puppetTextField.addActionListener(Controller.getInstance().puppetController);
-        JButton sendButton = new JButton("Send");
-        sendButton.addActionListener(Controller.getInstance().puppetController);
-
-        GridBagConstraints textFieldContrainsts = new GridBagConstraints();
-        textFieldContrainsts.fill = GridBagConstraints.HORIZONTAL;
-        textFieldContrainsts.gridx = 0;
-        textFieldContrainsts.gridy = 0;
-        textFieldContrainsts.gridwidth = 3;
-        textFieldContrainsts.gridheight = 1;
-        textFieldContrainsts.weightx = 0.5;
-        textFieldContrainsts.weighty = 0.5;
-        puppetPanel.add(puppetTextField, textFieldContrainsts);
-
-        GridBagConstraints buttonConstraints = new GridBagConstraints();
-        buttonConstraints.gridx = 3;
-        buttonConstraints.gridwidth = 1;
-        puppetPanel.add(sendButton, buttonConstraints);
-
-        return puppetPanel;
+        return PuppetPanel.create();
     }
 
     private JPanel favoritesPanel() {
@@ -151,32 +130,18 @@ public class AnnabelleFrame extends JFrame implements  ActionListener {
             JButton button = new JButton(key);
             button.addActionListener(Controller.getInstance().favoritesController);
             favoritesPanel.add(button);
-
         }
 
         return favoritesPanel;
     }
 
     private JPanel historyPanel() {
-        JPanel historyPanel = new JPanel(new BorderLayout());
-
-        JList<String> list = new JList<>();
-        list.setModel(Data.getInstance().historyModel);
-        list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        list.setLayoutOrientation(JList.VERTICAL);
-
-        JLabel label = new JLabel("History");
-        historyPanel.add(label, BorderLayout.NORTH);
-
-        historyPanel.add(list, BorderLayout.CENTER);
-
-        return historyPanel;
+        return HistoryPanel.create();
     }
 
     private JPanel eyePanel() {
         JPanel eyePanel = new JPanel();
         eyePanel.setLayout(new BoxLayout(eyePanel, BoxLayout.Y_AXIS));
-
 
         String[] eyeStates = {"blinking","open","closed","mid"};
         ButtonGroup group = new ButtonGroup();
@@ -220,7 +185,6 @@ public class AnnabelleFrame extends JFrame implements  ActionListener {
                 }
             }
         });
-
 
         JLabel label = new JLabel("Faces");
         facePanel.add(label);

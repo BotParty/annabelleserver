@@ -118,4 +118,8 @@ public class Data {
         masterList = ScriptList.open(fileToOpen);
         emotionList = masterList.getScripts();
     }
+
+    public DefaultListModel<String> getHistoryModel() {
+        return historyModel;
+    }
 }
