@@ -2,9 +2,7 @@ package org.botparty.annabelle.domain;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.List;
 
 public class Script {
@@ -39,5 +37,24 @@ public class Script {
         }
 
         return script;
+    }
+
+    public boolean save(String fileName) {
+        try {
+            BufferedWriter writer = new BufferedWriter(new FileWriter(fileName));
+
+            ObjectMapper mapper = new ObjectMapper();
+            String scriptAsString = mapper.writeValueAsString(this);
+            writer.write(scriptAsString);
+
+            writer.close();
+
+        } catch (IOException e2) {
+            // TODO Auto-generated catch block
+            e2.printStackTrace();
+            return false;
+        }
+
+        return true;
     }
 }

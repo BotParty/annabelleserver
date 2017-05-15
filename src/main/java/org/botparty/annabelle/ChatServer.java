@@ -16,9 +16,10 @@ public class ChatServer extends WebSocketServer {
     public static ChatServer instance = null;
 
     public static ChatServer getInstance() {
+        final int port = 8080;
         if(instance == null) {
             try {
-                instance = new ChatServer(12345);
+                instance = new ChatServer(port);
                 instance.start();
             } catch (UnknownHostException e) {
                 e.printStackTrace();

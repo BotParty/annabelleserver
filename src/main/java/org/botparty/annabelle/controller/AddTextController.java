@@ -15,5 +15,7 @@ public class AddTextController implements ActionListener {
         System.out.println("Puppet Text");
 
         Data.getInstance().getScriptContentModel().addElement(puppetText);
+        String currentTitle = Data.getInstance().getCurrentScriptTitle();
+        Data.getInstance().getScripts().get(currentTitle).lines.add(puppetText);
     }
 }

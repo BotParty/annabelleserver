@@ -2,6 +2,7 @@ package org.botparty.annabelle;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.botparty.annabelle.domain.Script;
 import org.botparty.annabelle.panels.HistoryPanel;
 import org.botparty.annabelle.panels.PuppetPanel;
 
@@ -210,18 +211,20 @@ public class AnnabelleFrame extends JFrame implements  ActionListener {
         this.setJMenuBar(menuBar);
     }
 
+    private void save() {
+        Set<String> files = Data.getInstance().scriptFileMap.keySet();
+        for(String fileName: files) {
+            // get title
+            String title = Data.getInstance().scriptFileMap.get(fileName);
+            Script script = Data.getInstance().getScripts().get(title);
+            script.save(fileName);
+        }
+    }
+
     @Override
     public void actionPerformed(ActionEvent e) {
         if(e.getSource() == menuItemSave) {
-
-            ObjectMapper mapper = new ObjectMapper();
-            String scriptAsJSONString = null;
-            try {
-                scriptAsJSONString = mapper.writeValueAsString(Data.getInstance().favorites);
-            } catch (JsonProcessingException e1) {
-                e1.printStackTrace();
-            }
-            System.out.println(scriptAsJSONString);
+            save();
         } else if(e.getSource() == menuItemOpen) {
             openFile();
         }
