@@ -20,10 +20,6 @@ public class ScriptList {
         return scripts;
     }
 
-    public void setScripts(List<String> scripts) {
-        this.scripts = scripts;
-    }
-
     public static ScriptList create(String fileName) {
 
         ScriptList scriptList = null;

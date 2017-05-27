@@ -24,6 +24,7 @@ public class ScriptListController implements ListSelectionListener {
                 Data.getInstance().getScriptContentModel().clear();
                 Script currentScript = Data.getInstance().getScripts().get(currentTitle);
                 currentScript.lines.forEach(Data.getInstance().getScriptContentModel()::addElement);
+                Data.getInstance().setCurrentScriptTitle(currentTitle);
             }
         }
     }

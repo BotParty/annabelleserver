@@ -22,10 +22,13 @@ public class Data {
 
     ScriptList masterList;
     Map<String, Script> scripts;
+    // <FileName, Title>
+    Map<String, String> scriptFileMap;
     Favorites favorites;
     String puppetText;
     String scriptContentText;
     List<String> emotionList;
+    String currentScriptTitle;
 
     DefaultListModel<String> historyModel;
     DefaultListModel<String> scriptModel;
@@ -81,20 +84,24 @@ public class Data {
         List<String> titleList2 = masterList.getScripts();
 
         scripts = new HashMap<>();
+        scriptFileMap = new HashMap<>();
         for(String title : titleList2) {
             java.nio.file.Path path = java.nio.file.Paths.get(parentPath, title);
             String absolutePath = path.toString();
             final Script script = Script.create(absolutePath);
             scripts.put(script.title, script);
+            scriptFileMap.put(title, script.title);
         }
 
         Set<String> titles = scripts.keySet();
         scriptModel.clear();
         titles.forEach(scriptModel::addElement);
 
-        Script currentScript = scripts.get(titles.toArray()[0]);
+        String currentScriptTitle = (String) titles.toArray()[0];
+        Script currentScript = scripts.get(currentScriptTitle);
         scriptContentModel.clear();
         currentScript.lines.forEach(scriptContentModel::addElement);
+        this.setCurrentScriptTitle(currentScriptTitle);
     }
 
     public void loadScriptList(String fileName) {
@@ -117,5 +124,17 @@ public class Data {
     public void loadEmotionList(File fileToOpen) {
         masterList = ScriptList.open(fileToOpen);
         emotionList = masterList.getScripts();
+    }
+
+    public DefaultListModel<String> getHistoryModel() {
+        return historyModel;
+    }
+
+    public String getCurrentScriptTitle() {
+        return currentScriptTitle;
+    }
+
+    public void setCurrentScriptTitle(String currentScriptTitle) {
+        this.currentScriptTitle = currentScriptTitle;
     }
 }

@@ -1,9 +1,6 @@
 package org.botparty.annabelle;
 
-import org.botparty.annabelle.controller.FavoritesController;
-import org.botparty.annabelle.controller.ScriptContentController;
-import org.botparty.annabelle.controller.ScriptListController;
-import org.botparty.annabelle.controller.SendController;
+import org.botparty.annabelle.controller.*;
 
 public class Controller {
 
@@ -21,17 +18,27 @@ public class Controller {
     SendController puppetController;
     ScriptListController scriptListController;
     ScriptContentController scriptContentController;
+    AddTextController addTextController;
 
     private Controller() {
         favoritesController = new FavoritesController();
         puppetController = new SendController();
         scriptListController = new ScriptListController();
         scriptContentController = new ScriptContentController();
+        addTextController = new AddTextController();
     }
 
     public void send(String text) {
         System.out.println(text);
         ChatServer.getInstance().sendToAll(text);
         Data.getInstance().historyModel.addElement(text);
+    }
+
+    public SendController getPuppetController() {
+        return puppetController;
+    }
+
+    public AddTextController getAddTextController() {
+        return addTextController;
     }
 }
