@@ -8,13 +8,26 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.beans.PropertyChangeListener;
 
 public class ScriptContentController implements ListSelectionListener, ActionListener {
+
+    public Action sendAction() {
+        return new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                send();
+            }
+        };
+    }
+
+
     @Override
     public void valueChanged(ListSelectionEvent e) {
-        if(!e.getValueIsAdjusting()) {
+        if(!e.getValueIsAdjusting()){
 
             ListSelectionModel listSelectionModel = (ListSelectionModel) e.getSource();
+
 
             int firstIndex = listSelectionModel.getMinSelectionIndex();
             System.out.println("Index: " + firstIndex);
@@ -31,6 +44,10 @@ public class ScriptContentController implements ListSelectionListener, ActionLis
 
     @Override
     public void actionPerformed(ActionEvent e) {
+        send();
+    }
+
+    private void send() {
         String scriptContextText = Data.getInstance().getScriptContentText();
         if(scriptContextText != null) {
             Controller.getInstance().send(scriptContextText);

@@ -17,6 +17,7 @@ public class Controller {
     FavoritesController favoritesController;
     SendController puppetController;
     ScriptListController scriptListController;
+
     ScriptContentController scriptContentController;
     AddTextController addTextController;
 
@@ -41,4 +42,9 @@ public class Controller {
     public AddTextController getAddTextController() {
         return addTextController;
     }
+
+    public ScriptContentController getScriptContentController() {
+        return scriptContentController;
+    }
+
 }
