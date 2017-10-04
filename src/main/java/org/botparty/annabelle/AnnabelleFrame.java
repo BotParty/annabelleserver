@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.botparty.annabelle.domain.Script;
 import org.botparty.annabelle.panels.HistoryPanel;
 import org.botparty.annabelle.panels.PuppetPanel;
+import org.botparty.annabelle.panels.ScriptContentPanel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -13,6 +14,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.AdjustmentEvent;
 import java.awt.event.AdjustmentListener;
 import java.io.File;
+import java.util.HashSet;
 import java.util.Set;
 
 public class AnnabelleFrame extends JFrame implements  ActionListener {
@@ -38,6 +40,7 @@ public class AnnabelleFrame extends JFrame implements  ActionListener {
         JPanel scriptPanel = listPanel();
 
         panel1.add(scriptPanel);
+        panel1.add(emotionsButtonsPanel());
         panel1.add(eyePanel());
 
         mainPanel.add(panel1);
@@ -82,22 +85,7 @@ public class AnnabelleFrame extends JFrame implements  ActionListener {
     }
 
     private JPanel scriptContentPanel() {
-        JPanel scriptContentPanel = new JPanel(new BorderLayout());
-
-        JButton button = new JButton("Send");
-        button.addActionListener(Controller.getInstance().scriptContentController);
-        scriptContentPanel.add(button, BorderLayout.NORTH);
-
-        JList<String> list = new JList<>();
-        list.setModel(Data.getInstance().scriptContentModel);
-        list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        list.setLayoutOrientation(JList.VERTICAL);
-        list.getSelectionModel().addListSelectionListener(Controller.getInstance().scriptContentController);
-
-        JScrollPane scrollPane = new JScrollPane(list);
-
-        scriptContentPanel.add(scrollPane, BorderLayout.CENTER);
-
+        ScriptContentPanel scriptContentPanel = new ScriptContentPanel();
         return scriptContentPanel;
     }
 
@@ -134,6 +122,30 @@ public class AnnabelleFrame extends JFrame implements  ActionListener {
         }
 
         return favoritesPanel;
+    }
+
+    private JPanel emotionsButtonsPanel() {
+        JPanel emotionsPanel = new JPanel();
+        emotionsPanel.setLayout(new GridLayout(2,3));
+
+        String[] emotionList = Data.getInstance().getEmotionList();
+        int i = 0;
+        for(String emotion : emotionList) {
+            if(i >= 6) break;
+            JButton button = new JButton(emotion);
+            button.addActionListener(
+                    new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                                Controller.getInstance().send(String.format("\\face %s",emotion));
+                            }
+                    }
+                    );
+            emotionsPanel.add(button);
+            i++;
+        }
+
+        return emotionsPanel;
     }
 
     private JPanel historyPanel() {
