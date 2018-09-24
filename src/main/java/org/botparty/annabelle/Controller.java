@@ -1,6 +1,10 @@
 package org.botparty.annabelle;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import org.botparty.annabelle.controller.*;
+import org.botparty.annabelle.domain.CommunicationData;
 
 public class Controller {
 
@@ -31,7 +35,16 @@ public class Controller {
 
     public void send(String text) {
         System.out.println(text);
-        ChatServer.getInstance().sendToAll(text);
+
+        // set up the Communications Data to go from server->face
+        CommunicationData data = new CommunicationData("server","face",text);
+
+        // take communications data and wrap it as a json object
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode node = mapper.convertValue(data, JsonNode.class);
+        String convertedText = node.asText();
+
+        ChatServer.getInstance().sendToAll(convertedText);
         Data.getInstance().historyModel.addElement(text);
     }
 
