@@ -1,9 +1,12 @@
 package org.botparty.annabelle;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.botparty.annabelle.domain.CommunicationData;
 import org.java_websocket.WebSocket;
 import org.java_websocket.handshake.ClientHandshake;
 import org.java_websocket.server.WebSocketServer;
 
+import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.UnknownHostException;
 import java.util.Collection;
@@ -13,9 +16,9 @@ import java.util.Collection;
  */
 public class ChatServer extends WebSocketServer {
 
-    public static ChatServer instance = null;
+    private static ChatServer instance = null;
 
-    public static ChatServer getInstance() {
+    static ChatServer getInstance() {
         final int port = 8080;
         if(instance == null) {
             try {
@@ -29,11 +32,7 @@ public class ChatServer extends WebSocketServer {
         return instance;
     }
 
-    public ChatServer(InetSocketAddress address) {
-        super(address);
-    }
-
-    public ChatServer(int port) throws UnknownHostException {
+    private ChatServer(int port) throws UnknownHostException {
         super( new InetSocketAddress(port));
     }
 
@@ -52,6 +51,20 @@ public class ChatServer extends WebSocketServer {
     @Override
     public void onMessage( WebSocket conn, String message ) {
       //  this.sendToAll( message );
+
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            CommunicationData communicationData = mapper.readValue(message,CommunicationData.class);
+            if(!"server".equals(communicationData.getSender())) {
+                // forward message onto correct recipient
+                communicationData.setSender("server");
+                String newText = mapper.writeValueAsString(communicationData);
+                this.sendToAll(newText);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         System.out.println( conn + ": " + message );
     }
 
@@ -71,7 +84,7 @@ public class ChatServer extends WebSocketServer {
      * @throws InterruptedException
      *             When socket related I/O errors occur.
      */
-    public void sendToAll( String text ) {
+    private void sendToAll(String text) {
         System.out.println("Sending text - " + text);
         Collection<WebSocket> con = connections();
         synchronized ( con ) {
